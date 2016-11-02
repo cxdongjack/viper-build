@@ -15,9 +15,13 @@ function base64(md5) {
     section = md5.substr(10, 12);
     // 先转成10进制，再转成8进制
     octal = parseInt(section, 16).toString(8);
+    // 保证16位长度
+    while(octal.length < 16) {
+        octal = '0' + octal;
+    }
     // 循环，每次取2位（8*8 = 64），并转成10进制
     for (i = 0;i < 16;i = i + 2) {
-        index = parseInt(octal.substr(i, 2), 8)
+        index = parseInt(octal.substr(i, 2), 8);
         base64 += BASE64_DIGITS[index];
     }
     return base64;

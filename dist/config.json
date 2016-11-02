@@ -1,0 +1,7 @@
+{
+  "source": "sample",
+  "dist": "dist",
+  "entry": [
+    "sample/index.html"
+  ]
+}
