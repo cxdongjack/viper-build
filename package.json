@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "shelljs": "^0.7.5"
+    "clean-css": "^3.4.20",
+    "shelljs": "^0.7.5",
+    "uglify-js": "^2.7.4"
   }
 }

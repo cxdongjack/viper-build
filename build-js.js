@@ -8,7 +8,8 @@ var fs =require('fs');
 // var prefix = path.basename(target);
 var files = process.argv.slice(2);
 
-var cnt = cat(files);
+var prepend = __dirname + '/util/prepend.js';
+var cnt = cat(prepend, files);
 
 // 清理掉include
 cnt = cnt.replace(/include\s*\([\s\S]+?\);/g, '');

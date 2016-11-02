@@ -5,10 +5,14 @@ sh.config.silent = true;
 
 function run(task, args) {
     echo('>> task: ', task);
-    var cmd = 'node ' + __dirname + '/' + task + '.js ' + (args || '');
+    var cmd = task;
+    if (cmd.charAt(0) != '.') {
+        cmd = 'node ' + __dirname + '/' + task + '.js';
+    }
+    cmd = cmd + ' ' + (args || '');
     echo('>> cmd: ', cmd);
     var ret = exec(cmd);
-    echo('>> ret: ', ret);
+    echo('>> ret: ', ret.substr(0, 100), '\n------\n');
     return ret;
 }
 
@@ -49,12 +53,21 @@ var jsFiles = files.filter(function(file) {
     return file.match(/\.js$/);
 });
 var jsTarget = config.dist + '/' + path.parse(entry).name + '.js';
-run('build-js',  jsFiles.join(' '));
+run('build-js',  jsFiles.join(' ')).to(jsTarget);
+
+// task: min-css
+var cssMinTarget = config.dist + '/' + path.parse(entry).name + '.min.css';
+run('./node_modules/.bin/cleancss', cssTarget).to(cssMinTarget);
+
+// task: min-js
+// uglifyjs $js_list -m -c "pure_getters=true,pure_funcs=['Date.now','Math.random']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null | sed '$d' > $2
+var jsMinTarget = config.dist + '/' + path.parse(entry).name + '.min.js';
+var uglifyjsArgs = ' -m -c "pure_getters=true,pure_funcs=[\'Date.now\',\'Math.random\']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 2>/dev/null';
+run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
+
+// task:update html
 
 
 
-// build-js
-// var jsFiles = files.filter(function(file) {
-//     return file.match(/\.js$/);
-// })
-// run('build-js', config.dist + ' ' + jsFiles.join(' '));
+
+
