@@ -1,5 +1,6 @@
 var path = require('path');
 var sh = require('shelljs');
+var asset = require('./util/asset.js');
 var silentState = sh.config.silent; // save old silent state
 sh.config.silent = true;
 
@@ -31,6 +32,7 @@ configStr.to(config.dist + '/config.json');
 
 // task: module
 var entry = config.entry[0];
+var moduleName = path.parse(entry).name;
 var modulePath = run('module', entry);
 
 // task: parse
@@ -42,7 +44,7 @@ var cssFiles = files.filter(function(file) {
     return file.match(/\.css$/);
 });
 // dist/index.css
-var cssTarget = config.dist + '/' + path.parse(entry).name + '.css';
+var cssTarget = config.dist + '/' + moduleName + '.css';
 run('build-css',  cssFiles.join(' ')).to(cssTarget);
 
 // copy imgs
@@ -52,18 +54,33 @@ run('copy-css-img', cssTarget).to(cssTarget);
 var jsFiles = files.filter(function(file) {
     return file.match(/\.js$/);
 });
-var jsTarget = config.dist + '/' + path.parse(entry).name + '.js';
+var jsTarget = config.dist + '/' + moduleName + '.js';
 run('build-js',  jsFiles.join(' ')).to(jsTarget);
 
 // task: min-css
-var cssMinTarget = config.dist + '/' + path.parse(entry).name + '.min.css';
+var cssMinTarget = config.dist + '/' + moduleName + '.min.css';
 run('./node_modules/.bin/cleancss', cssTarget).to(cssMinTarget);
+var cssMinHashTarget = config.dist + '/' + asset(cssMinTarget) + '.css';
+mv(cssMinTarget, config.dist + '/' + asset(cssMinTarget) + '.css');
 
 // task: min-js
 // uglifyjs $js_list -m -c "pure_getters=true,pure_funcs=['Date.now','Math.random']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null | sed '$d' > $2
-var jsMinTarget = config.dist + '/' + path.parse(entry).name + '.min.js';
+var jsMinTarget = config.dist + '/' + moduleName + '.min.js';
 var uglifyjsArgs = ' -m -c "pure_getters=true,pure_funcs=[\'Date.now\',\'Math.random\']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 2>/dev/null';
 run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
+var jsMinHashTarget = config.dist + '/' + asset(jsMinTarget) + '.js';
+mv(jsMinTarget, jsMinHashTarget);
+
+// task: generate .json
+var distPkg = {
+    js : jsTarget,
+    css : cssTarget,
+    minjs : jsMinHashTarget,
+    mincss : cssMinHashTarget
+};
+echo(JSON.stringify(distPkg, 1, 2)).to(config.dist + '/' + moduleName + '.json');
+
+
 
 // task:update html
 
