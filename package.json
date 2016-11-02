@@ -1,0 +1,11 @@
+{
+  "name": "viper-build",
+  "version": "1.0.0",
+  "description": "build tools for viper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
