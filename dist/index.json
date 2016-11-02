@@ -1,4 +1,5 @@
 {
+  "html": "sample/index.html",
   "js": "dist/index.js",
   "css": "dist/index.css",
   "minjs": "dist/u2BZ4ZgI.js",

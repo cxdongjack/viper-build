@@ -13,7 +13,7 @@ function run(task, args) {
     cmd = cmd + ' ' + (args || '');
     echo('>> cmd: ', cmd);
     var ret = exec(cmd);
-    echo('>> ret: ', ret.substr(0, 100), '\n------\n');
+    echo('>> ret: ', ret.substr(0, 200), '\n------\n');
     return ret;
 }
 
@@ -31,5 +31,8 @@ run('clean', config.dist);
 configStr.to(config.dist + '/config.json');
 
 // task: module
-var entry = config.entry[0];
-run('build', entry + ' ' + config.dist);
+config.entry.forEach(function(entry) {
+    var json = run('build', entry + ' ' + config.dist);
+    json = JSON.parse(json);
+    run('update-html', json.html + ' ' + json.minjs + ' ' + json.mincss).to(json.html);
+});

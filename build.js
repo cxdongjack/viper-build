@@ -1,19 +1,19 @@
 // test: node build.js sample/index.html dist
 var path = require('path');
-// var sh = require('shelljs');
-// sh.config.silent = true;
+var sh = require('shelljs');
+sh.config.silent = true;
 var asset = require('./util/asset.js');
 
 function run(task, args) {
-    echo('>> task: ', task);
+    // echo('>> task: ', task);
     var cmd = task;
     if (cmd.charAt(0) != '.') {
         cmd = 'node ' + __dirname + '/' + task + '.js';
     }
     cmd = cmd + ' ' + (args || '');
-    echo('>> cmd: ', cmd);
+    // echo('>> cmd: ', cmd);
     var ret = exec(cmd);
-    echo('>> ret: ', ret.substr(0, 100), '\n------\n');
+    // echo('>> ret: ', ret.substr(0, 100), '\n------\n');
     return ret;
 }
 
@@ -64,6 +64,7 @@ mv(jsMinTarget, jsMinHashTarget);
 
 // task: generate .json
 var distPkg = {
+    html : entry,
     js : jsTarget,
     css : cssTarget,
     minjs : jsMinHashTarget,
