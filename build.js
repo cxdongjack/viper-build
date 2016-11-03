@@ -1,19 +1,19 @@
-// test: node build.js sample/index.html dist
+// test: node build.js sample/index.html dist [debug]
 var path = require('path');
 var sh = require('shelljs');
 sh.config.silent = true;
 var asset = require('./util/asset.js');
 
 function run(task, args) {
-    // echo('>> task: ', task);
+    isDebug && echo('>> task: ', task);
     var cmd = task;
     if (cmd.charAt(0) != '.') {
         cmd = 'node ' + __dirname + '/' + task + '.js';
     }
     cmd = cmd + ' ' + (args || '');
-    // echo('>> cmd: ', cmd);
+    isDebug && echo('>> cmd: ', cmd);
     var ret = exec(cmd);
-    // echo('>> ret: ', ret.substr(0, 100), '\n------\n');
+    isDebug && echo('>> ret: ', ret.substr(0, 100), '\n------\n');
     return ret;
 }
 
@@ -23,6 +23,7 @@ require('shelljs/global');
 // task: module
 var entry = process.argv[2];
 var dist = process.argv[3];
+var isDebug = process.argv[4];
 var moduleName = path.parse(entry).name;
 var modulePath = run('module', entry);
 
@@ -62,13 +63,21 @@ run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
 var jsMinHashTarget = dist + '/' + asset(jsMinTarget) + '.js';
 mv(jsMinTarget, jsMinHashTarget);
 
+// task:
+var htmlTarget = dist + '/' + moduleName + '.html';
+run('update-html', entry + ' ' + jsMinHashTarget + ' ' + cssMinHashTarget).to(htmlTarget);
+
 // task: generate .json
 var distPkg = {
-    html : entry,
+    html : htmlTarget,
     js : jsTarget,
     css : cssTarget,
     minjs : jsMinHashTarget,
     mincss : cssMinHashTarget
 };
-echo(JSON.stringify(distPkg, 1, 2)).to(dist + '/' + moduleName + '.json');
+echo(JSON.stringify(distPkg, 1, 2));
 
+// clean
+if (!isDebug) {
+    rm(distPkg.js, distPkg.css);
+}

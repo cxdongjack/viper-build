@@ -27,12 +27,7 @@ config = JSON.parse(configStr);
 // task: clean
 run('clean', config.dist);
 
-// 中间文件, 方便debug
-configStr.to(config.dist + '/config.json');
-
 // task: module
 config.entry.forEach(function(entry) {
-    var json = run('build', entry + ' ' + config.dist);
-    json = JSON.parse(json);
-    run('update-html', json.html + ' ' + json.minjs + ' ' + json.mincss).to(json.html);
+    run('build', entry + ' ' + config.dist);
 });
