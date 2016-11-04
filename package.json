@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "build tools for viper",
   "main": "index.js",
+  "bin": {
+    "viper-build": "index.js"
+  },
   "scripts": {
     "test": "node index.js"
   },
