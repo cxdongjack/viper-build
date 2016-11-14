@@ -63,7 +63,6 @@ file.read = function(filepath) {
 };
 
 file.readJSON = function(filepath) {
-  log.debug('parse', file.cleanpath(filepath));
   try {
     return JSON.parse(file.read(file.abspath(filepath)));
   } catch (e) {

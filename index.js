@@ -21,6 +21,7 @@ function run(task, args) {
 
 // global
 require('shelljs/global');
+var isDebug = process.argv[2];
 
 // task: config
 var configStr = run('config');

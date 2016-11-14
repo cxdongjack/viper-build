@@ -53,7 +53,7 @@ run('build-js',  jsFiles.join(' ')).to(jsTarget);
 var cssMinTarget = dist + '/' + moduleName + '.min.css';
 run('./node_modules/.bin/cleancss', cssTarget).to(cssMinTarget);
 var cssMinHashTarget = dist + '/' + asset(cssMinTarget) + '.css';
-mv(cssMinTarget, dist + '/' + asset(cssMinTarget) + '.css');
+mv(cssMinTarget, cssMinHashTarget);
 
 // task: min-js
 // uglifyjs $js_list -m -c "pure_getters=true,pure_funcs=['Date.now','Math.random']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null | sed '$d' > $2

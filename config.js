@@ -1,12 +1,13 @@
 require('shelljs/global');
+var file = require('./util/file.js');
 
 var pkgPath = process.argv[2] || './package.json';
 
-var pkg = require(pkgPath);
+var pkg = file.readJSON(pkgPath);
 
 var config = pkg['build'] || {};
 
-config.source = config.source || 'sample';
+config.source = config.source || 'src';
 
 config.dist = config.dist || 'dist';
 
