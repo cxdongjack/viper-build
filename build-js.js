@@ -12,6 +12,6 @@ var prepend = __dirname + '/util/prepend.js';
 var cnt = cat(prepend, files);
 
 // 清理掉include
-cnt = cnt.replace(/include\s*\([\s\S]+?\);/g, '');
+cnt = cnt.replace(/include\s*\([\s\S]+?\);?/g, '');
 
 echo(cnt);
