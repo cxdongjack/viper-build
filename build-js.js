@@ -3,6 +3,7 @@
 require('shelljs/global');
 var path =require('path');
 var fs =require('fs');
+var tmpl =require('./util/tmpl.js');
 
 // var target = process.argv[2];
 // var prefix = path.basename(target);
@@ -13,5 +14,7 @@ var cnt = cat(prepend, files);
 
 // 清理掉include
 cnt = cnt.replace(/include\s*\([\s\S]+?\);?/g, '');
+
+cnt = tmpl(cnt);
 
 echo(cnt);
