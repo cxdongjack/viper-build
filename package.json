@@ -17,6 +17,7 @@
     "uglify-js": "2.4.15"
   },
   "build": {
-    "source": "sample"
+    "source": "sample",
+    "project": "viper-build"
   }
 }

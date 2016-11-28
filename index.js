@@ -32,5 +32,7 @@ run('clean', config.dist);
 
 // task: module
 config.entry.forEach(function(entry) {
-    run('build', entry + ' ' + config.dist);
+    var distStr = run('build', entry + ' ' + config.dist);
+    var dist = JSON.parse(distStr);
+    run('appcache', config.dist + ' ' + dist.moduleName + ' ' + config.project)
 });

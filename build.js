@@ -69,6 +69,7 @@ run('update-html', entry + ' ' + jsMinHashTarget + ' ' + cssMinHashTarget).to(ht
 
 // task: generate .json
 var distPkg = {
+    moduleName : moduleName,
     html : htmlTarget,
     js : jsTarget,
     css : cssTarget,
@@ -77,3 +78,7 @@ var distPkg = {
 };
 echo(JSON.stringify(distPkg, 1, 2));
 
+// clean
+//if (!isDebug) {
+    //rm(distPkg.js, distPkg.css);
+//}
