@@ -77,7 +77,3 @@ var distPkg = {
 };
 echo(JSON.stringify(distPkg, 1, 2));
 
-// clean
-if (!isDebug) {
-    rm(distPkg.js, distPkg.css);
-}
