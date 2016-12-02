@@ -15,6 +15,10 @@ var cnt = cat(prepend, files);
 // 清理掉include
 cnt = cnt.replace(/include\s*\([\s\S]+?\);?/g, '');
 
+// 清理掉develpment
+cnt = cnt.replace(/\/\/@develpment([\s\S]+?)\/\/@end/g, '');
+
 cnt = tmpl(cnt);
 
 echo(cnt);
+
