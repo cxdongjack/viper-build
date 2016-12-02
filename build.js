@@ -49,6 +49,9 @@ var jsFiles = files.filter(function(file) {
 var jsTarget = dist + '/' + moduleName + '.js';
 run('build-js',  jsFiles.join(' ')).to(jsTarget);
 
+// copy js uri
+run('copy-js-uri', [dist, entry, jsTarget].join(' ')).to(jsTarget);
+
 // task: min-css
 var cssMinTarget = dist + '/' + moduleName + '.min.css';
 run('./node_modules/.bin/cleancss', cssTarget).to(cssMinTarget);

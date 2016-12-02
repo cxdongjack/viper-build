@@ -92,3 +92,9 @@ function text() {
 moduleA()
 console.log('success!');
 
+
+
+var app__testLocalURI = '9oZi9@9q.json';
+
+
+
