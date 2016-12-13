@@ -34,5 +34,10 @@ run('clean', config.dist);
 config.entry.forEach(function(entry) {
     var distStr = run('build', entry + ' ' + config.dist);
     var dist = JSON.parse(distStr);
-    run('appcache', config.dist + ' ' + dist.moduleName + ' ' + config.project)
+    // 特殊逻辑
+    if (config.entry.length == 1) {
+        var dist = JSON.parse(distStr);
+        run('appcache', config.dist + ' ' + dist.moduleName + ' ' + config.project)
+            .to(config.dist + '/cache.appcache');
+    }
 });
