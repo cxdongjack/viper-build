@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 仅合并，不压缩
 //test: node build-raw.js sample/module/app/app.js dist raw sample/index.html
 var path = require('path');
@@ -22,6 +23,9 @@ function run(task, args) {
 require('shelljs/global');
 
 // task: module
+if (process.argv.length < 5) {
+    return echo('viper-build-raw app.js dist index [index.html]');
+}
 var entry = process.argv[2];
 var dist = process.argv[3];
 var moduleName = process.argv[4];

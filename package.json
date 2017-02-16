@@ -4,11 +4,14 @@
   "description": "build tools for viper",
   "main": "index.js",
   "bin": {
-    "viper-build": "index.js"
+    "viper-build": "index.js",
+    "viper-build-umd": "build-umd.js",
+    "viper-build-raw": "build-raw.js"
   },
   "scripts": {
     "test": "node index.js",
-    "raw": "node build-raw.js sample/module/app/app.js dist raw sample/index.html"
+    "raw": "node build-raw.js sample/module/app/app.js dist raw sample/index.html",
+    "umd": "node build-umd.js sample/module/app/app.js dist/umd.js"
   },
   "author": "",
   "license": "ISC",

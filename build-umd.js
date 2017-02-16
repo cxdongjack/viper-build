@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 //test: node build-umd.js sample/module/app/app.js ttt.js
 var path = require('path');
 var sh = require('shelljs');
@@ -21,9 +22,12 @@ function run(task, args) {
 require('shelljs/global');
 
 // task: module
+if (process.argv.length < 4) {
+    return echo('viper-build-umd app.js dist.js');
+}
 var entry = process.argv[2];
 var dist = process.argv[3];
-var isDebug = process.argv[4];
+var isDebug = 1;
 
 // task: parse
 var filesStr = run('parse', entry);
