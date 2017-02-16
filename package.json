@@ -7,7 +7,8 @@
     "viper-build": "index.js"
   },
   "scripts": {
-    "test": "node index.js"
+    "test": "node index.js",
+    "raw": "node build-raw.js sample/module/app/app.js dist raw sample/index.html"
   },
   "author": "",
   "license": "ISC",

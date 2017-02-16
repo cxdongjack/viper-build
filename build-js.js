@@ -13,12 +13,21 @@ var prepend = __dirname + '/util/prepend.js';
 var cnt = cat(prepend, files);
 
 // 清理掉include
-cnt = cnt.replace(/include\s*\([\s\S]+?\);?/g, '');
+cnt = comment(cnt, /include\s*\([\s\S]+?\);?/g);
 
 // 清理掉develpment
-cnt = cnt.replace(/\/\/@develpment([\s\S]+?)\/\/@end/g, '');
+cnt = comment(cnt, /\/\/@develpment([\s\S]+?)\/\/@end/g);
 
 cnt = tmpl(cnt);
 
 echo(cnt);
 
+
+function comment(cnt, reg) {
+    return cnt.replace(reg, function(match, name, url) {
+        var lines = match.split('\n').map(function(line) {
+            return '// ' + line;
+        });
+        return lines.join('\n');
+    });
+}

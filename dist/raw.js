@@ -83,8 +83,13 @@ console.log('enter module-a');
 
 function moduleA() {
     return 'moduleA';
-}
-
+}// include([
+//     'a.js',
+//     'a.css',
+// ]);
+// include([
+//     '../module-a/all.js',
+// ]);
 
 function text() {
     return "some text";
@@ -93,7 +98,9 @@ function text() {
 moduleA()
 console.log('success!');
 
-
+// //@develpment
+// console.assert('module A error');
+// //@end
 
 var app__testLocalURI = '9oZi9@9q.json';
 
