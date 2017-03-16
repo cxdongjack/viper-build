@@ -2,6 +2,7 @@
 var path = require('path');
 var sh = require('shelljs');
 sh.config.silent = true;
+sh.config.fatal = true;
 var asset = require('./util/asset.js');
 
 function run(task, args) {
