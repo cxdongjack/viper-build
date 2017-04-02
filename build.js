@@ -62,14 +62,21 @@ mv(cssMinTarget, cssMinHashTarget);
 // task: min-js
 // uglifyjs $js_list -m -c "pure_getters=true,pure_funcs=['Date.now','Math.random']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null | sed '$d' > $2
 var jsMinTarget = dist + '/' + moduleName + '.min.js';
-var uglifyjsArgs = ' -m -c "pure_getters=true,pure_funcs=[\'Date.now\',\'Math.random\']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 2>/dev/null';
+var uglifyjsArgs = ' -m -c "pure_getters=true,pure_funcs=[\'Date.now\',\'Math.random\']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null';
 run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
-var jsMinHashTarget = dist + '/' + asset(jsMinTarget) + '.js';
+var jsMinHash= asset(jsMinTarget);
+var jsMinHashTarget = dist + '/' + jsMinHash + '.js';
 mv(jsMinTarget, jsMinHashTarget);
 
 // task:
 var htmlTarget = dist + '/' + moduleName + '.html';
 run('update-html', entry + ' ' + jsMinHashTarget + ' ' + cssMinHashTarget).to(htmlTarget);
+
+// backup the sourcemap and raw
+var rawTarget = dist + '/' + jsMinHash + '.raw';
+cp(jsTarget, rawTarget);
+var mapTarget = dist + '/' + jsMinHash  + '.map';
+mv('/tmp/build.js.map', mapTarget);
 
 // task: generate .json
 var distPkg = {
@@ -78,7 +85,9 @@ var distPkg = {
     js : jsTarget,
     css : cssTarget,
     minjs : jsMinHashTarget,
-    mincss : cssMinHashTarget
+    mincss : cssMinHashTarget,
+    map: mapTarget,
+    raw: rawTarget
 };
 echo(JSON.stringify(distPkg, 1, 2));
 
