@@ -55,7 +55,7 @@ run('copy-js-uri', [dist, entry, jsTarget].join(' ')).to(jsTarget);
 
 // task: min-css
 var cssMinTarget = dist + '/' + moduleName + '.min.css';
-run('./node_modules/.bin/cleancss', cssTarget).to(cssMinTarget);
+run('./node_modules/clean-css/bin/cleancss', cssTarget).to(cssMinTarget);
 var cssMinHashTarget = dist + '/' + asset(cssMinTarget) + '.css';
 mv(cssMinTarget, cssMinHashTarget);
 
@@ -63,7 +63,7 @@ mv(cssMinTarget, cssMinHashTarget);
 // uglifyjs $js_list -m -c "pure_getters=true,pure_funcs=['Date.now','Math.random']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null | sed '$d' > $2
 var jsMinTarget = dist + '/' + moduleName + '.min.js';
 var uglifyjsArgs = ' -m -c "pure_getters=true,pure_funcs=[\'Date.now\',\'Math.random\']" -b "beautify=false,ascii-only=true" -e "window:window,undefined" --screw-ie8 --source-map /tmp/build.js.map 2>/dev/null';
-run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
+run('./node_modules/uglify-js/bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
 var jsMinHash= asset(jsMinTarget);
 var jsMinHashTarget = dist + '/' + jsMinHash + '.js';
 mv(jsMinTarget, jsMinHashTarget);

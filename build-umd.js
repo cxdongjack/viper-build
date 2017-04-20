@@ -43,5 +43,5 @@ run('build-js',  jsFiles.join(' ')).to(jsTarget);
 // task: min-js
 var jsMinTarget = dist;
 var uglifyjsArgs = ' -e "window:window,undefined" --screw-ie8 -c -b "beautify=true,ascii-only=true" 2>/dev/null';
-run('./node_modules/.bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
+run('./node_modules/uglify-js/bin/uglifyjs', jsTarget + uglifyjsArgs).to(jsMinTarget);
 
