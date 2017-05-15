@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // test: node build.js sample/index.html dist [debug]
 var path = require('path');
 var sh = require('shelljs');
@@ -18,6 +19,10 @@ function run(task, args) {
     return ret;
 }
 
+function isHtml(entry) {
+    return path.parse(entry).ext === '.html';
+}
+
 // global
 require('shelljs/global');
 
@@ -25,8 +30,16 @@ require('shelljs/global');
 var entry = process.argv[2];
 var dist = process.argv[3];
 var isDebug = process.argv[4];
-var moduleName = path.parse(entry).name;
-var modulePath = run('module', entry);
+var moduleName = 'index';
+var modulePath = entry;
+
+// 兼容html，自动解析[data-module=*]字段
+if (isHtml(entry)) {
+    modulePath = run('module', entry);
+    moduleName = path.parse(entry).name;
+}
+
+mkdir('-p', dist);
 
 // task: parse
 var filesStr = run('parse', modulePath);
@@ -51,7 +64,10 @@ var jsTarget = dist + '/' + moduleName + '.js';
 run('build-js',  jsFiles.join(' ')).to(jsTarget);
 
 // copy js uri
-run('copy-js-uri', [dist, entry, jsTarget].join(' ')).to(jsTarget);
+// deprecated: 因为根据入口JS没办法计算依赖，并且该方法没有被用过，下个版本移除
+if (isHtml(entry)) {
+    run('copy-js-uri', [dist, entry, jsTarget].join(' ')).to(jsTarget);
+}
 
 // task: min-css
 var cssMinTarget = dist + '/' + moduleName + '.min.css';
@@ -70,7 +86,9 @@ mv(jsMinTarget, jsMinHashTarget);
 
 // task:
 var htmlTarget = dist + '/' + moduleName + '.html';
-run('update-html', entry + ' ' + jsMinHashTarget + ' ' + cssMinHashTarget).to(htmlTarget);
+// 如果是使用js的方式打包, 入口文件使用标准模板
+var htmlSource = isHtml(entry) ? entry : __dirname + '/util/template.html';
+run('update-html', htmlSource + ' ' + jsMinHashTarget + ' ' + cssMinHashTarget).to(htmlTarget);
 
 // backup the sourcemap and raw
 var rawTarget = dist + '/' + jsMinHash + '.raw';

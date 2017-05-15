@@ -5,6 +5,7 @@
   "main": "index.js",
   "bin": {
     "viper-build": "index.js",
+    "viper-build-entry": "build.js",
     "viper-build-umd": "build-umd.js",
     "viper-build-raw": "build-raw.js"
   },
